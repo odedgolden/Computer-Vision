@@ -20,5 +20,7 @@ figure; imshow(z,[]);
 % 3) Convolution Mask for shifting the image to the left
 
 % Section B - Canny Edge Detector:
+
+
 % Section C - Evaluation:
 % Section D - Comparision:
