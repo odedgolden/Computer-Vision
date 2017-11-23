@@ -11,19 +11,33 @@
 
 close all;
 clear all;
-imageName = 'Alicia2.jpg';
-C = canny(imageName, 1,1,1)
+image_name = 'Alicia2.jpg';
+C = canny(image_name, 1,1,1)
 imshow(C);
 
-%   FUNCTIONS:
+%   MAIN FUNCTION:
 
 function E = canny(imagePath, sigma, L_th, H_th)
 I = imread(imagePath);
 ID = im2double(I);
-
-% G_dx = Deriv_Gauss_x(sigma, mask_size)
-% G_dy = Deriv_Gauss_y(sigma, mask_size)
+mask_size = 16;
+% Create the Gaussian kernels:
+G_dx = Deriv_Gauss_x(sigma, mask_size)
+G_dy = Deriv_Gauss_y(sigma, mask_size)
 
 E = I;
 end
 
+% HELPER FUNCTIONS
+
+function D = Deriv_Gauss_x(sigma, mask_size)
+[x,y] = meshgrid(-mask_size:mask_size, -mask_size:mask_size)
+D = exp(-(x.^2 + y.^2)/(2*sigma^2))
+D = D./sum(D(:))
+end
+
+function D = Deriv_Gauss_y(sigma, mask_size)
+[x,y] = meshgrid(-mask_size:mask_size, -mask_size:mask_size)
+D = exp(-(x.^2 + y.^2)/(2*sigma^2))
+D = D./sum(D(:))
+end
