@@ -12,8 +12,10 @@ close all;
 clear all;
 % image_name = 'Alicia1.jpg';
 % image_name = 'lighthouse.bmp';
-image_name = 'Nuns.jpg';
-C = canny(image_name, 4, -0.2, 0.2);
+% image_name = 'Nuns.jpg';
+% image_name = 'Church.jpg';
+image_name = 'Golf.jpg';
+C = canny(image_name, 4, -1.5, 0.3);
 % imshow(C);
 
 %   MAIN FUNCTION:
@@ -42,7 +44,7 @@ E_high = Et > H_th ;
 E_high = E_high.*Et;
 E_low = Et > L_th;
 E_low = E_low.*Et;
-E = apply_thresholds(E_low, H_th);
+E = apply_thresholds(E_high, E_low, G_orientation, L_th);
 
 subplot(3, 3, 1), surf(G_dx); title('G\_dx');
 subplot(3, 3, 2), surf(G_dy); title('G\_dy');
@@ -50,10 +52,15 @@ subplot(3, 3, 4), imshow(I_x); title('I\_x');
 subplot(3, 3, 5), imshow(I_y); title('I\_y');
 subplot(3, 3, 3), imshow(G_magnitude); title('G\_magnitude');
 subplot(3, 3, 6), imshow(G_orientation); title('G\_orientation');
-subplot(3, 3, 7), imshow(Et); title('Et');
-subplot(3, 3, 8), imshow(E_high); title('E\_high');
+subplot(3, 3, 8), imshow(E_low); title('E\_low');
+subplot(3, 3, 7), imshow(E_high); title('E\_high');
 subplot(3, 3, 9), imshow(E); title('Canny');
 
+% subplot(1, 3, 1), imshow(E_high); title('E\_high');
+% subplot(1, 3, 2), imshow(E_low); title('E\_low');
+% subplot(1, 3, 3), imshow(E-E_low); title('Canny');
+
+% imshow(E);
 end
 
 %   HELPER FUNCTIONS
@@ -76,50 +83,69 @@ function Et = thinning(G_magnitude, G_orientation)
 n = length(G_magnitude);
 m = length(G_magnitude(:,1));
 zero = min(G_magnitude(:));
+Et = G_magnitude - G_magnitude;
+for i = 2 : m-3
+    for j = 2 : n-3
+        if (mod(G_orientation(i,j),180)==135)
+            maximum =  max(G_magnitude(i,j),max(G_magnitude(i-1,j+1),G_magnitude(i+1,j-1)));
+            if (maximum<=G_magnitude(i,j))
+                Et(i,j) = G_magnitude(i,j);
+            end
+            
+        elseif (mod(G_orientation(i,j),180)==0)
+            maximum =  max(G_magnitude(i,j),max(G_magnitude(i+1,j),G_magnitude(i-1,j)));
+            if (maximum<=G_magnitude(i,j))
+                Et(i,j) = G_magnitude(i,j);
+            end
+            
+        elseif (mod(G_orientation(i,j),180)==45)
+            maximum =  max(G_magnitude(i,j),max(G_magnitude(i-1,j-1),G_magnitude(i+1,j+1)));   
+            if (maximum<=G_magnitude(i,j))
+                Et(i,j) = G_magnitude(i,j);
+            end
+            
+        else % mod(G_orientation(i,j),180)==90
+            maximum =  max(G_magnitude(i,j),max(G_magnitude(i,j+1),G_magnitude(i,j-1)));    
+            if (maximum<=G_magnitude(i,j))
+                Et(i,j) = G_magnitude(i,j);
+            end
+        end
+    end
+end
+end
+
+function E = apply_thresholds(E_high, E_low, G_orientation, L_th)
+n = length(E_low);
+m = length(E_low(:,1));
+
 for i = 2 : m-3
     for j = 2 : n-3
         if (mod(G_orientation(i,j),180)==45)
-            maximum =  max(G_magnitude(i,j),max(G_magnitude(i-1,j+1),G_magnitude(i+1,j-1)));
-            if (maximum>G_magnitude(i,j))
-                G_magnitude(i,j) = zero;
+            maximum =  max(E_high(i-1,j+1),E_high(i+1,j-1));
+            if (maximum>L_th)
+                E_high(i,j) = E_low(i,j);
             end
             
         elseif (mod(G_orientation(i,j),180)==90)
-            maximum =  max(G_magnitude(i,j),max(G_magnitude(i+1,j),G_magnitude(i-1,j)));
-            if (maximum>G_magnitude(i,j))
-                G_magnitude(i,j) = zero;
+            maximum =  max(E_high(i+1,j),E_high(i-1,j));
+            if (maximum>L_th)
+                E_high(i,j) = E_low(i,j);
             end
             
         elseif (mod(G_orientation(i,j),180)==135)
-            maximum =  max(G_magnitude(i,j),max(G_magnitude(i-1,j-1),G_magnitude(i+1,j+1)));   
-            if (maximum>G_magnitude(i,j))
-                G_magnitude(i,j) = zero;
+            maximum =  max(E_high(i-1,j-1),E_high(i+1,j+1));   
+            if (maximum>L_th)
+                E_high(i,j) = E_low(i,j);
             end
             
         else % mod(G_orientation(i,j),180)==0
-            maximum =  max(G_magnitude(i,j),max(G_magnitude(i,j+1),G_magnitude(i,j-1)));    
-            if (maximum>G_magnitude(i,j))
-                G_magnitude(i,j) = zero;
+            maximum =  max(E_high(i,j+1),E_high(i,j-1));    
+            if (maximum>L_th)
+                E_high(i,j) = E_low(i,j);
             end
         end
     end
 end
 
-Et = G_magnitude;
-
-end
-
-function E = apply_thresholds(E_low, H_th)
-n = length(E_low);
-m = length(E_low(:,1));
-zero = min(E_low(:));
-for i = 2 : m-3
-    for j = 2 : n-3
-        if((E_low(i-1,j-1) < H_th) && (E_low(i-1,j) < H_th) && (E_low(i-1,j+1) < H_th) && (E_low(i,j-1) < H_th) && (E_low(i,j) < H_th) && (E_low(i,j+1) < H_th) && (E_low(i+1,j-1) < H_th) && (E_low(i+1,j) < H_th) && (E_low(i+1,j+1) < H_th))
-            E_low(i,j) = zero;
-        end
-
-    end
-end
-E = E_low;
+E = E_high;
 end
