@@ -11,7 +11,8 @@
 close all;
 clear all;
 % image_name = 'Alicia1.jpg';
-image_name = 'lighthouse.bmp';
+% image_name = 'lighthouse.bmp';
+image_name = 'Church.jpg';
 C = canny(image_name, 4,1,1);
 % imshow(C);
 
@@ -67,10 +68,11 @@ Dy = -y.*D;
 end
 
 function Et = thinning(G_magnitude, G_orientation)
-
+n = length(G_magnitude);
+m = length(G_magnitude(:,1));
 zero = min(G_magnitude(:));
-for i = 2 : 509
-    for j = 2 : 509
+for i = 2 : m-3
+    for j = 2 : n-3
         if (mod(G_orientation(i,j),180)==45)
             maximum =  max(G_magnitude(i,j),max(G_magnitude(i-1,j+1),G_magnitude(i+1,j-1)));
             if (maximum>G_magnitude(i,j))
