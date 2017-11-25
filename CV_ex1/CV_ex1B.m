@@ -30,16 +30,23 @@ I_y = imfilter(ID, G_dy);
 
 G_magnitude = I_x.^2+I_y.^2;
 G_magnitude = G_magnitude.^0.5;
-G_orientation = atan(I_x./I_y);
+G_orientation = radtodeg(atan(I_x./I_y));
 
-subplot(3, 2, 1), surf(G_dx); title('G\_dx');
-subplot(3, 2, 2), surf(G_dy); title('G\_dy');
-subplot(3, 2, 3), imshow(I_x); title('I\_x');
-subplot(3, 2, 4), imshow(I_y); title('I\_y');
-subplot(3, 2, 5), imshow(G_magnitude); title('G\_magnitude');
-subplot(3, 2, 6), imshow(G_orientation); title('G\_orientation');
+G_orientation = G_orientation - mod(G_orientation,45);
+% display(G_orientation(80:100,80:100));
+Et = thinning(G_magnitude, G_orientation);
 
-E = I;
+subplot(3, 3, 1), surf(G_dx); title('G\_dx');
+subplot(3, 3, 2), surf(G_dy); title('G\_dy');
+subplot(3, 3, 4), imshow(I_x); title('I\_x');
+subplot(3, 3, 5), imshow(I_y); title('I\_y');
+subplot(3, 3, 3), imshow(G_magnitude); title('G\_magnitude');
+subplot(3, 3, 6), imshow(G_orientation); title('G\_orientation');
+subplot(3, 3, 7), imshow(Et); title('Et');
+subplot(3, 3, 8), imshow(G_orientation); title('G\_orientation');
+subplot(3, 3, 9), imshow(G_orientation); title('G\_orientation');
+
+E = G_orientation;
 end
 
 %   HELPER FUNCTIONS
@@ -57,3 +64,40 @@ D = exp(-(x.^2 + y.^2)/(2*sigma^2));
 D = D./sum(D(:));
 Dy = -y.*D;
 end
+
+function Et = thinning(G_magnitude, G_orientation)
+
+zero = min(G_magnitude(:));
+for i = 2 : 509
+    for j = 2 : 509
+        if (mod(G_orientation(i,j),180)==45)
+            maximum =  max(G_magnitude(i,j),max(G_magnitude(i-1,j+1),G_magnitude(i+1,j-1)));
+            if (maximum>G_magnitude(i,j))
+                G_magnitude(i,j) = zero;
+            end
+            
+        elseif (mod(G_orientation(i,j),180)==90)
+            maximum =  max(G_magnitude(i,j),max(G_magnitude(i+1,j),G_magnitude(i-1,j)));
+            if (maximum>G_magnitude(i,j))
+                G_magnitude(i,j) = zero;
+            end
+            
+        elseif (mod(G_orientation(i,j),180)==135)
+            maximum =  max(G_magnitude(i,j),max(G_magnitude(i-1,j-1),G_magnitude(i+1,j+1)));   
+            if (maximum>G_magnitude(i,j))
+                G_magnitude(i,j) = zero;
+            end
+            
+        else % mod(G_orientation(i,j),180)==0
+            maximum =  max(G_magnitude(i,j),max(G_magnitude(i,j+1),G_magnitude(i,j-1)));    
+            if (maximum>G_magnitude(i,j))
+                G_magnitude(i,j) = zero;
+            end
+        end
+    end
+end
+
+Et = G_magnitude;
+
+end
+
