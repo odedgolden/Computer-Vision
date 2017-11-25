@@ -10,7 +10,8 @@
 %   SCRIPT:
 close all;
 clear all;
-image_name = 'Alicia1.jpg';
+% image_name = 'Alicia1.jpg';
+image_name = 'lighthouse.bmp';
 C = canny(image_name, 4,1,1);
 % imshow(C);
 
