@@ -12,8 +12,8 @@ close all;
 clear all;
 % image_name = 'Alicia1.jpg';
 % image_name = 'lighthouse.bmp';
-image_name = 'Church.jpg';
-C = canny(image_name, 4,1,1);
+image_name = 'Nuns.jpg';
+C = canny(image_name, 4, -0.2, 0.2);
 % imshow(C);
 
 %   MAIN FUNCTION:
@@ -38,6 +38,12 @@ G_orientation = G_orientation - mod(G_orientation,45);
 % display(G_orientation(80:100,80:100));
 Et = thinning(G_magnitude, G_orientation);
 
+E_high = Et > H_th ;
+E_high = E_high.*Et;
+E_low = Et > L_th;
+E_low = E_low.*Et;
+E = apply_thresholds(E_low, H_th);
+
 subplot(3, 3, 1), surf(G_dx); title('G\_dx');
 subplot(3, 3, 2), surf(G_dy); title('G\_dy');
 subplot(3, 3, 4), imshow(I_x); title('I\_x');
@@ -45,10 +51,9 @@ subplot(3, 3, 5), imshow(I_y); title('I\_y');
 subplot(3, 3, 3), imshow(G_magnitude); title('G\_magnitude');
 subplot(3, 3, 6), imshow(G_orientation); title('G\_orientation');
 subplot(3, 3, 7), imshow(Et); title('Et');
-subplot(3, 3, 8), imshow(G_orientation); title('G\_orientation');
-subplot(3, 3, 9), imshow(G_orientation); title('G\_orientation');
+subplot(3, 3, 8), imshow(E_high); title('E\_high');
+subplot(3, 3, 9), imshow(E); title('Canny');
 
-E = G_orientation;
 end
 
 %   HELPER FUNCTIONS
@@ -104,3 +109,17 @@ Et = G_magnitude;
 
 end
 
+function E = apply_thresholds(E_low, H_th)
+n = length(E_low);
+m = length(E_low(:,1));
+zero = min(E_low(:));
+for i = 2 : m-3
+    for j = 2 : n-3
+        if((E_low(i-1,j-1) < H_th) && (E_low(i-1,j) < H_th) && (E_low(i-1,j+1) < H_th) && (E_low(i,j-1) < H_th) && (E_low(i,j) < H_th) && (E_low(i,j+1) < H_th) && (E_low(i+1,j-1) < H_th) && (E_low(i+1,j) < H_th) && (E_low(i+1,j+1) < H_th))
+            E_low(i,j) = zero;
+        end
+
+    end
+end
+E = E_low;
+end
