@@ -10,18 +10,23 @@
 %   SCRIPT:
 close all;
 clear all;
-% image_name = 'Alicia1.jpg';
+image_name = 'Alicia2.jpg';
 % image_name = 'lighthouse.bmp';
 % image_name = 'Nuns.jpg';
 % image_name = 'Church.jpg';
-image_name = 'Golf.jpg';
-C = canny(image_name, 4, -1.5, 0.3);
+% image_name = 'Golf.jpg';
+
+C = canny(image_name, 0.8, -15, 0.3);
 % imshow(C);
 
 %   MAIN FUNCTION:
 
 function E = canny(imagePath, sigma, L_th, H_th)
 I = imread(imagePath);
+
+im_test = checkerboard(8);
+I = im_test;
+
 ID = im2double(I);
 mask_size = 3*sigma;
 
@@ -52,7 +57,7 @@ subplot(3, 3, 4), imshow(I_x); title('I\_x');
 subplot(3, 3, 5), imshow(I_y); title('I\_y');
 subplot(3, 3, 3), imshow(G_magnitude); title('G\_magnitude');
 subplot(3, 3, 6), imshow(G_orientation); title('G\_orientation');
-subplot(3, 3, 8), imshow(E_low); title('E\_low');
+subplot(3, 3, 8), imshow(Et); title('E\_low');
 subplot(3, 3, 7), imshow(E_high); title('E\_high');
 subplot(3, 3, 9), imshow(E); title('Canny');
 
