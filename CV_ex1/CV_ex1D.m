@@ -4,13 +4,18 @@
 %   SCRIPT:
 close all;
 clear all;
-image_name = 'Alicia2.jpg';
-% image_name = 'lighthouse.bmp';
-% image_name = 'Nuns.jpg';
-% image_name = 'Church.jpg';
-% image_name = 'Golf.jpg';
-S = sobel(image_name);
-imshow(S);
+image_dir = strcat(pwd,'/images/');
+images = ['Alicia1.jpg',"Alicia2.jpg","lighthouse.bmp"];
+official_images = ["Nuns.jpg","Church.jpg","Golf.jpg"];
+official_ground_truth = ["Nuns_GT.bmp","Church_GT.bmp","Golf_GT.bmp"];
+
+for i = 1 : length(official_images)
+    path = char(strcat(image_dir,string(official_images(i))));
+    S = sobel(path);
+    gt = imread(char(strcat(image_dir,string(official_ground_truth(i)))));
+    figure, subplot(1, 2, 1), imshow(S); title('Our Sobel');
+    subplot(1, 2, 2), imshow(gt,[]); title('Ground Truth');
+end
 
 %   MAIN FUNCTION:
 
@@ -19,9 +24,9 @@ function E = sobel(imagePath)
 Gx=[-1 0 1;-2 0 2; -1 0 1];
 Gy=[-1 -2 -1;0 0 0; 1 2 1];
 
-im_test = checkerboard(8);
-I = im_test;
-% I = imread(imagePath);
+% im_test = checkerboard(8);
+% I = im_test;
+I = imread(imagePath);
 
 ID = im2double(I);
 
