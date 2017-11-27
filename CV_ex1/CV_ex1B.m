@@ -10,25 +10,41 @@
 %   SCRIPT:
 close all;
 clear all;
-image_name = 'Alicia2.jpg';
-% image_name = 'lighthouse.bmp';
-% image_name = 'Nuns.jpg';
-% image_name = 'Church.jpg';
-% image_name = 'Golf.jpg';
-
-C = canny(image_name, 0.8, -15, 0.3);
-% imshow(C);
+image_dir = strcat(pwd,'/images/');
+images = ['Alicia1.jpg',"Alicia2.jpg","lighthouse.bmp"];
+official_images = ["Nuns.jpg","Church.jpg","Golf.jpg"];
+official_ground_truth = ["Nuns_GT.bmp","Church_GT.bmp","Golf_GT.bmp"];
+low_thresholds = [-2,-0.5,0,0.5];
+high_thresholds = [-0.5,0,0.5,1];
+sigmas = [0.8,1,2,4];
+i =1;
+% for i = 1 : length(official_images)
+j = 4;
+%     for j = 1 : length(sigmas)
+k = 1;
+%         for k = 1 : length(low_thresholds)
+l = 4;
+%             for l = 1 : length(high_thresholds)
+            path = char(strcat(image_dir,string(official_images(i))));
+            C = canny(path, sigmas(j), low_thresholds(k),high_thresholds(l));
+            gt = imread(char(strcat(image_dir,string(official_ground_truth(i)))));
+            figure, subplot(1, 2, 1), imshow(C); title('Our Canny');
+            subplot(1, 2, 2), imshow(gt,[]); title('Ground Truth');
+%             end
+%         end
+%     end
+% end
 
 %   MAIN FUNCTION:
 
 function E = canny(imagePath, sigma, L_th, H_th)
 I = imread(imagePath);
 
-im_test = checkerboard(8);
-I = im_test;
+% im_test = checkerboard(8);
+% I = im_test;
 
 ID = im2double(I);
-mask_size = 3*sigma;
+mask_size = 2*sigma;
 
 % Create the Gaussian kernels:
 G_dx = Deriv_Gauss_x(sigma, mask_size);
@@ -51,15 +67,15 @@ E_low = Et > L_th;
 E_low = E_low.*Et;
 E = apply_thresholds(E_high, E_low, G_orientation, L_th);
 
-subplot(3, 3, 1), surf(G_dx); title('G\_dx');
-subplot(3, 3, 2), surf(G_dy); title('G\_dy');
-subplot(3, 3, 4), imshow(I_x); title('I\_x');
-subplot(3, 3, 5), imshow(I_y); title('I\_y');
-subplot(3, 3, 3), imshow(G_magnitude); title('G\_magnitude');
-subplot(3, 3, 6), imshow(G_orientation); title('G\_orientation');
-subplot(3, 3, 8), imshow(Et); title('E\_low');
-subplot(3, 3, 7), imshow(E_high); title('E\_high');
-subplot(3, 3, 9), imshow(E); title('Canny');
+% subplot(3, 3, 1), surf(G_dx); title('G\_dx');
+% subplot(3, 3, 2), surf(G_dy); title('G\_dy');
+% subplot(3, 3, 4), imshow(I_x); title('I\_x');
+% subplot(3, 3, 5), imshow(I_y); title('I\_y');
+% subplot(3, 3, 3), imshow(G_magnitude); title('G\_magnitude');
+% subplot(3, 3, 6), imshow(G_orientation); title('G\_orientation');
+% subplot(3, 3, 8), imshow(Et); title('E\_low');
+% subplot(3, 3, 7), imshow(E_high); title('E\_high');
+% subplot(3, 3, 9), imshow(E); title('Canny');
 
 % subplot(1, 3, 1), imshow(E_high); title('E\_high');
 % subplot(1, 3, 2), imshow(E_low); title('E\_low');
