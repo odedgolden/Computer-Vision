@@ -14,16 +14,16 @@ image_dir = strcat(pwd,'/images/');
 images = ['Alicia1.jpg',"Alicia2.jpg","lighthouse.bmp"];
 official_images = ["Nuns.jpg","Church.jpg","Golf.jpg"];
 official_ground_truth = ["Nuns_GT.bmp","Church_GT.bmp","Golf_GT.bmp"];
-low_thresholds = [-2,-0.5,0,0.5];
-high_thresholds = [-0.5,0,0.5,1];
-sigmas = [0.8,1,2,4];
-i =1;
+low_thresholds = [-1.5,-0.5,0,0.5];
+high_thresholds = [-11,0,0.5,1];
+sigmas = [0.1,0.2,0.4,2.5];
+i =2;
 % for i = 1 : length(official_images)
 j = 4;
 %     for j = 1 : length(sigmas)
 k = 1;
 %         for k = 1 : length(low_thresholds)
-l = 4;
+l = 3;
 %             for l = 1 : length(high_thresholds)
             path = char(strcat(image_dir,string(official_images(i))));
             C = canny(path, sigmas(j), low_thresholds(k),high_thresholds(l));
@@ -58,24 +58,25 @@ G_magnitude = G_magnitude.^0.5;
 G_orientation = radtodeg(atan(I_x./I_y));
 
 G_orientation = G_orientation - mod(G_orientation,45);
-% display(G_orientation(80:100,80:100));
 Et = thinning(G_magnitude, G_orientation);
 
+mini = min(Et(:))
+maxi = max(Et(:))
 E_high = Et > H_th ;
 E_high = E_high.*Et;
 E_low = Et > L_th;
 E_low = E_low.*Et;
 E = apply_thresholds(E_high, E_low, G_orientation, L_th);
 
-% subplot(3, 3, 1), surf(G_dx); title('G\_dx');
-% subplot(3, 3, 2), surf(G_dy); title('G\_dy');
-% subplot(3, 3, 4), imshow(I_x); title('I\_x');
-% subplot(3, 3, 5), imshow(I_y); title('I\_y');
-% subplot(3, 3, 3), imshow(G_magnitude); title('G\_magnitude');
-% subplot(3, 3, 6), imshow(G_orientation); title('G\_orientation');
-% subplot(3, 3, 8), imshow(Et); title('E\_low');
-% subplot(3, 3, 7), imshow(E_high); title('E\_high');
-% subplot(3, 3, 9), imshow(E); title('Canny');
+subplot(3, 3, 1), surf(G_dx); title('G\_dx');
+subplot(3, 3, 2), surf(G_dy); title('G\_dy');
+subplot(3, 3, 4), imshow(I_x); title('I\_x');
+subplot(3, 3, 5), imshow(I_y); title('I\_y');
+subplot(3, 3, 3), imshow(G_magnitude); title('G\_magnitude');
+subplot(3, 3, 6), imshow(G_orientation); title('G\_orientation');
+subplot(3, 3, 8), imshow(Et); title('E\_low');
+subplot(3, 3, 7), imshow(E_high); title('E\_high');
+subplot(3, 3, 9), imshow(E); title('Canny');
 
 % subplot(1, 3, 1), imshow(E_high); title('E\_high');
 % subplot(1, 3, 2), imshow(E_low); title('E\_low');
