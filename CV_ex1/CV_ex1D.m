@@ -1,4 +1,5 @@
-% Sobel Edge Detector Implementation:
+
+% Section D - Sobel Edge Detector Implementation:
 
 
 %   SCRIPT:

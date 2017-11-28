@@ -1,19 +1,8 @@
-% Section A - Convolution:
 
-% Useful functions:
-% help conv
-% help hold on
-% help plot
-% help meshgrid
-% a = zeros(100,100);
-% a(1:10,:)=255;
-
-% First we will create a synthetic image:
-% [y,x] = meshgrid(-500:500,-500:500);
-% z = x.^2 + y.^2;
-% figure; imshow(z,[]);
+% Section A - Convolutions:
 
 % 1) Convolution Mask 5x5 for black patch
+
 m1 = [0 0 0 0 0; 0 1 1 1 0; 0 -2 -2 -2 0; 0 1 1 1 0; 0 0 0 0 0];
 im1 = repmat(255,100,100);
 im1(50,:) = 0;
@@ -47,8 +36,3 @@ im1(:,12) = 255;
 figure; imshow(im1,[]);
 c = conv2(im1,m1, 'same');
 figure; imshow(c,[]);
-
-
-% Section B - Canny Edge Detector:
-% Section C - Evaluation:
-% Section D - Comparision:
