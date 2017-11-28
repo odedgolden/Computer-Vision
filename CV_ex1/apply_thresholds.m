@@ -31,5 +31,5 @@ for i = 2 : m-3
     end
 end
 
-E = (E_high>L_th)*255;
+E = (E_high>L_th);
 end
