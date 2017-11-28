@@ -1,4 +1,3 @@
-
 % Section C - Canny Edge Detector Evaluation:
 
 %   SCRIPT:
@@ -10,7 +9,7 @@ official_ground_truth = ["Nuns_GT.bmp","Church_GT.bmp","Golf_GT.bmp"];
 
 sigma = [2,4,6];
 L_th = [0.01, 0.1, 0.3];
-H_th = [0.05, 0.5, 0.8];
+H_th = [0.05, 0.5, 1];
 index = 1;
 
 for i=1:length(official_images)
@@ -38,20 +37,53 @@ for i=1:length(official_images)
         end
     end
     
-    % Take the maximum values
-    [maxP,I] = max(P_tot);
+    % Take the maximum values - naive
+    [maxP,I] = max(Pn_tot);
+    maxPVal(i) = maxP;
     maxP_params(i,:)=params(I,:);
-    [maxR,I] = max(R_tot);
+    [maxR,I] = max(Rn_tot);
+    maxRVal(i) = maxR;
     maxR_params(i,:)=params(I,:);
-    [maxF,I] = max(F_tot);
+    [maxF,I] = max(Fn_tot);
+    maxFVal(i) = maxF;
     maxF_params(i,:)=params(I,:);
+    
+    %%%% for shift evaluation %%%%
+    [SmaxP,I] = max(P_tot);
+    SmaxPVal(i) = SmaxP;
+    SmaxP_params(i,:)=params(I,:);
+    [SmaxR,I] = max(R_tot);
+    SmaxRVal(i) = SmaxR;
+    SmaxR_params(i,:)=params(I,:);
+    [SmaxF,I] = max(F_tot);
+    SmaxFVal(i) = SmaxF;
+    SmaxF_params(i,:)=params(I,:);
+    
+    Pn_tot = Pn_tot - Pn_tot;
+    Rn_tot = Rn_tot - Rn_tot;
+    Fn_tot = Fn_tot - Fn_tot;
+    P_tot = P_tot - P_tot;
+    R_tot = R_tot - R_tot;
+    F_tot = F_tot - F_tot;
 end
+
+%%%% Naive evaluation results %%%%
+display('Naive evaluation - best results');
+display(maxPVal);
+display(maxRVal);
+display(maxFVal);
 
 display(maxP_params);
 display(maxR_params);
 display(maxF_params);
+
+%%%% evaluation results %%%%
+display('Evaluation - best results');
+display(SmaxPVal);
+display(SmaxRVal);
+display(SmaxFVal);
     
-    
-    
-    
-    
+display(SmaxP_params);
+display(SmaxR_params);
+display(SmaxF_params);
+
