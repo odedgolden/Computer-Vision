@@ -20,6 +20,40 @@ low_thresholds = [0.2,0.02];
 high_thresholds = [1,0.1];
 sigmas = [2,4];
 
+% % C.
+% % The sigma parameter effects the blur of the image, which effects the
+% % magnitude of the signal, here are two examples:
+E1= canny(char('./Images/Church.jpg'), 2, 0.2, 1);
+E2= canny(char('./Images/Church.jpg'), 6, 0.2, 1);
+
+figure; imshow(E1,[]);
+title('Using sigma = 2');
+figure; imshow(E2,[]);
+title('Using sigma = 4');
+
+% The L_th parameter effects the shape of the edges, smaller L_th will
+% cause a more noise but more complete edges.
+E3= canny(char('./Images/Church.jpg'), 1, 0, 1);
+E4= canny(char('./Images/Church.jpg'), 1, 0.5, 1);
+
+figure; imshow(E3,[]);
+title('Using L\_th = -0.2');
+figure; imshow(E4,[]);
+title('Using L\_th = 0.6');
+
+% The H_th parameter effects the weakest edges that we will detect, 
+% here are two examples:
+
+E5= canny(char('./Images/Church.jpg'), 2, 8, 16);
+E6= canny(char('./Images/Church.jpg'), 2, 8, 32);
+
+figure; imshow(E5,[]);
+title('Using H\_th = 16');
+figure; imshow(E6,[]);
+title('Using H\_th = 32');
+
+
+
 
 for i = 1 : length(official_images)
     for j = 1 : length(sigmas)-1

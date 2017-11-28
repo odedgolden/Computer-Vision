@@ -18,8 +18,8 @@ G_orientation = G_orientation - mod(G_orientation,45);
 % display(G_orientation);
 Et = thinning(G_magnitude, G_orientation);
 
-% mini = min(Et(:))
-% maxi = max(Et(:))
+mini = min(Et(:))
+maxi = max(Et(:))
 E_high = Et > H_th ;
 E_high = E_high.*Et;
 E_low = Et > L_th;
