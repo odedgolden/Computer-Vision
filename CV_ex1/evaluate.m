@@ -1,0 +1,20 @@
+function [P,R,F]=evaluate(E,E_GT)
+E_shiftx = circshift(E,1,1);
+E_shifty = circshift(E,1,2);
+e=sum(E(:)==1);
+e_x=sum(E_shiftx(:)==1);
+e_y=sum(E_shifty(:)==1);
+e_total=[e e_x e_y];
+gt=sum(E_GT(:)==1);
+E_CROSS=E+E_GT;
+E_CROSSx=E_shiftx+E_GT;
+E_CROSSy=E_shifty+E_GT;
+cross=sum(E_CROSS(:)==2);
+cross_x=sum(E_CROSSx(:)==2);
+cross_y=sum(E_CROSSy(:)==2);
+cross_total=[cross cross_x cross_y];
+p=cross_total./e_total;
+r=cross_total./gt;
+P=max(p);
+R=max(r);
+F=2*(P*R/(P+R));
