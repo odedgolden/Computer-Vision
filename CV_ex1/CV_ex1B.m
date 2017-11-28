@@ -8,13 +8,18 @@
 %   SCRIPT:
 close all;
 clear all;
+
+im_test = checkerboard(8);
+imwrite(im_test,'./images/im_test.jpg')
+
 image_dir = strcat(pwd,'/images/');
 images = ['Alicia1.jpg',"Alicia2.jpg","lighthouse.bmp"];
-official_images = ["Nuns.jpg","Church.jpg","Golf.jpg"];
-official_ground_truth = ["Nuns_GT.bmp","Church_GT.bmp","Golf_GT.bmp"];
+official_images = ["Nuns.jpg","Church.jpg","Golf.jpg","im_test.jpg"];
+official_ground_truth = ["Nuns_GT.bmp","Church_GT.bmp","Golf_GT.bmp","im_test.jpg"];
 low_thresholds = [0.01,0.02];
 high_thresholds = [0.05,0.1];
-sigmas = [4,6];
+sigmas = [2,4];
+
 
 for i = 1 : length(official_images)
     for j = 1 : length(sigmas)
