@@ -50,16 +50,22 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Compute intrinsic projection matrices: Mint1 and Mint2
 
-    Mint1=
-    Mint2=
+    Mint1= [
+            f1*Sx1  0   ox1
+            0   f1*Sy1  oy1
+            0   0   1]
+    Mint2= [
+            f2*Sx2  0   ox2
+            0   f2*Sy2  oy2
+            0   0   1]
       
 % Compute the projection matrices
 
-    M1=
-    M2=
+    M1= Mint1*[R1 T1];
+    M2= Mint2*[R2 T2];
       
-        
-         
+    pinv(M1)
+    pinv(M2)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % (4) Verify that the null space of M is indeed the COP     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -133,11 +139,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
    
- 
-     e1=
-     e2=
- 
-     F=
+%  
+%      e1=
+%      e2=
+%  
+%      F=
      
  % Please normalize F by F(3,3).
  
