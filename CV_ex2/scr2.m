@@ -60,16 +60,46 @@
             0   0   1]
       
 % Compute the projection matrices
-
-    M1= Mint1*[R1 T1];
-    M2= Mint2*[R2 T2];
+    P = [
+        1   0   0   0
+        0   1   0   0
+        0   0   1   0];
+    rotation1 = [ 
+                    1   0   0   0 
+                    0   1   0   0
+                    0   0   1   0
+                    0   0   0   1]
+    rotation2 = [
+                    0.9891  0.0602  -0.1346 0
+                    -0.0590 0.9982   0.0134 0
+                    0.1351  -0.0053 0.9908  0
+                    0   0   0   1]    
+    translation1 = [
+                    1   0   0   0
+                    0   1   0   0
+                    0   0   1   0
+                    0   0   0   1]
+    translation2 = [
+                    1   0   0   -178.2218
+                    0   1   0   -18.8171
+                    0   0   1   13.7744
+                    0   0   0   1]
+                
+    M1= Mint1*P*rotation1*translation1;
+    M2= Mint2*P*rotation2*translation2;
       
     pinv(M1)
     pinv(M2)
+    
+    d = sqrt((oy1-oy2)^2+(ox1-ox2)^2)
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % (4) Verify that the null space of M is indeed the COP     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+    N1 = null(M1)
+    N2 = null(M2)
+    d = norm(T1-T2)
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % (6) Projection                                             %
