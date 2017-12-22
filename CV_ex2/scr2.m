@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %The [rameters of the left and right cameras 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+close all
        
 % Image 1: Intrinsic parameters: 
     
@@ -85,22 +85,38 @@
                     0   0   1   13.7744
                     0   0   0   1]
                 
-    M1= Mint1*P*rotation1*translation1;
-    M2= Mint2*P*rotation2*translation2;
-      
-    pinv(M1)
-    pinv(M2)
-    
+    M1= Mint1*P*rotation1*translation1
+    M2= Mint2*P*rotation2*translation2
+
     d = sqrt((oy1-oy2)^2+(ox1-ox2)^2)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % (4) Verify that the null space of M is indeed the COP     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    N1 = null(M1)
-    N2 = null(M2)
+    N1 = null(M1);
+    N2 = null(M2);
+    
+    N1 = N1(1:3)./N1(4)
+    N2 = N2(1:3)./N2(4)
+    
     d = norm(T1-T2)
     
+    p = [-140
+            50  
+            1200
+            1];
+    q = [30
+        100
+        2000 
+        1];
+    
+    p1 = M1*p
+    p2 = M2*p
+    q1 = M1*q
+    q2 = M2*q
+    
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % (6) Projection                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
