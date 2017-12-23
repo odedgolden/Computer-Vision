@@ -232,9 +232,9 @@ end
     
 % (12) Corner detector + matching removal by Sampson distance
 
-th = 1.5
-[m1, m2] = extractAndMatchSIFT(im1, im2,th);
-dispMatchingPairImages(im1, im2,m1,m2);
+% th = 1.5
+% [m1, m2] = extractAndMatchSIFT(im1, im2,th);
+% dispMatchingPairImages(im1, im2,m1,m2);
 
 
 
