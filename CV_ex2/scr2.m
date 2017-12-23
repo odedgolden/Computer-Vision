@@ -6,46 +6,46 @@ close all
 % Image 1: Intrinsic parameters: 
     
   %Image center: 
-     ox1 = 331.023000, 
-     oy1 = 259.386377 
+     ox1 = 331.023000;
+     oy1 = 259.386377 ;
      
   %Scale factor: 
-     Sx1 = 1100.504780, 
-     Sy1 = 1097.763735
+     Sx1 = 1100.504780;
+     Sy1 = 1097.763735;
      
 %Focal length: 
-     f1=1.0
+     f1=1.0;
      
 % Image 1: extrinsic parameters: 
      %Rotation: 
      R1=[ 1  0 0 
          0 1 0
-         0 0 1]
+         0 0 1];
     
 %Translation:
-    T1=[0 0 0]'% Image 1: Intrinsic parameters: 
+    T1=[0 0 0]';% Image 1: Intrinsic parameters: 
     
      
 % Image 2: Intrinsic parameters: 
     %Image center: 
-    ox2 = 320.798101, 
-    oy2 = 236.431326,
+    ox2 = 320.798101; 
+    oy2 = 236.431326;
 
     % Scale factor: 
-    Sx2 = 1095.671499, 
-    Sy2 = 1094.559584 
+    Sx2 = 1095.671499;
+    Sy2 = 1094.559584;
    
     % Focal length: 
-    f2=1.0
+    f2=1.0;
      
     T2=-[178.2218
         18.8171
-        -13.7744]
+        -13.7744];
     
     R2 =[
          0.9891    0.0602   -0.1346
         -0.0590    0.9982    0.0134
-         0.1351   -0.0053    0.9908]
+         0.1351   -0.0053    0.9908];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Compute intrinsic projection matrices: Mint1 and Mint2
@@ -68,22 +68,22 @@ close all
                     1   0   0   0 
                     0   1   0   0
                     0   0   1   0
-                    0   0   0   1]
+                    0   0   0   1];
     rotation2 = [
                     0.9891  0.0602  -0.1346 0
                     -0.0590 0.9982   0.0134 0
                     0.1351  -0.0053 0.9908  0
-                    0   0   0   1]    
+                    0   0   0   1];  
     translation1 = [
                     1   0   0   0
                     0   1   0   0
                     0   0   1   0
-                    0   0   0   1]
+                    0   0   0   1];
     translation2 = [
                     1   0   0   -178.2218
                     0   1   0   -18.8171
                     0   0   1   13.7744
-                    0   0   0   1]
+                    0   0   0   1];
                 
     M1= Mint1*P*rotation1*translation1
     M2= Mint2*P*rotation2*translation2
@@ -97,8 +97,8 @@ close all
     N1 = null(M1);
     N2 = null(M2);
     
-    N1 = N1(1:3)./N1(4)
-    N2 = N2(1:3)./N2(4)
+    cop1 = N1(1:3)./N1(4)
+    cop2 = N2(1:3)./N2(4)
     
     d = norm(T1-T2)
     
@@ -185,10 +185,10 @@ close all
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
    
-%  
-%      e1=
-%      e2=
-%  
+ 
+     e1= M2*N1
+     e2= M1*N2
+ 
 %      F=
      
  % Please normalize F by F(3,3).
@@ -222,8 +222,8 @@ end
     
 % (12) Corner detector + matching removal by Sampson distance
 
-
-
+[m1, m2] = extractAndMatchSIFT(im1, im2,th);
+dispMatchingPairImages(im1, im2,m1,m2);
 
 
 
