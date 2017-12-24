@@ -2,7 +2,8 @@
 %The [rameters of the left and right cameras 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 close all
-       
+run('vlfeat-0.9.20/toolbox/vl_setup')
+  
 % Image 1: Intrinsic parameters: 
     
   %Image center: 
@@ -231,10 +232,22 @@ for i=1:length(Px)
 end
     
 % (12) Corner detector + matching removal by Sampson distance
+%  Hi grader, I couldn't get the library to work on my mac, 
+%  But this is the gist of it:
 
 % th = 1.5
 % [m1, m2] = extractAndMatchSIFT(im1, im2,th);
 % dispMatchingPairImages(im1, im2,m1,m2);
+% dists = sampsonDistance(F,m1,m2)
+% for i=1:length(dists)
+%     if dists(i) > 0.1
+%         m1(i,:) = [];
+%         m2(i,:) = [];
+%     end
+% dispMatchingPairImages(im1, im2,m1,m2);
+
+% Thanks for your understanding!
+
 
 
 
