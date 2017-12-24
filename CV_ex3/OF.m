@@ -1,0 +1,1 @@
+function [U,V, M,O]=OF(F1,F2, Sigma_S, Region)
