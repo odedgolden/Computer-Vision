@@ -1,18 +1,33 @@
 %Script HW3
+clc
+clear all
 
 vid = VideoReader('SLIDE.avi');
 mov=read(vid);
 
 currAxes = axes;
-for i=1:size(mov,4)
-   im=rgb2gray(mov(:,:,:,i)); %covert to gray scale
-   im=resize(im,0.3); %resize the image
-   imshow(im,[]);
-    hold on;
-    
-    %%% put here your optical flow results on im and its successive frame using quiver
-    quiver(OF())
-    pause(0.1);
-    hold off;
+Sigma_S=1;
+Region=2;
+
+%%%% Reading the first image %%%%
+im2=rgb2gray(mov(:,:,:,1)); %covert to gray scale
+im2=imresize(im2,0.3); %resize the image
+figure; imshow(im2,[]);
+
+for i=2:size(mov,4)
+   im1=im2;
+   im2=rgb2gray(mov(:,:,:,i)); %covert to gray scale
+   im2=imresize(im2,0.3); %resize the image
+   imshow(im2,[]);
+   hold on;
+   [U,V,M,O]=OF(im1,im2, Sigma_S, Region);
+   [X Y]=meshgrid(1:size(im1,2),1:size(im1,1));
+   nu12=medfilt2(U,[5 5]);
+   nv12=medfilt2(V,[5 5]);
+   figure; imshow(im1,[]);
+   hold on;
+   quiver(X(1:5:end,1:5:end),Y(1:5:end,1:5:end),nu12(1:5:end,1:5:end),nv12(1:5:end,1:5:end),5);
+   pause(0.1);
+   hold off;
 end
     
