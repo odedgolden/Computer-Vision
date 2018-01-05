@@ -1,0 +1,20 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\begin{document}
+\centering{\textbf{Computer Vision - Assignment 3}}
+\newline  Michal Sinai, Oded Golden
+\begin{enumerate}
+\item Homography: Let $(p_1,p_2,...,p_n)$ be points in image $I_1$ and $(q_1,q_2,...,q_n)$ be points in image $I_2$. We will prove that there exists a 3x3 matrix $H$ such that $\forall i\in [1,n]: p_i=Hq_i$
+\begin{enumerate}
+\item Assumption: $I_1$ has the same coordinates system as the world.
+\item Given: $C=COP_1=COP_2$
+\item Let $M_1$ denote the camera calibration matrix of $I_1$ and $M_2$ denote the camera calibration matrix of $I_2$.
+\item We can then express any point $P$ from $A$ as $p=M_1P, q=M_2P$
+\item From (a) and (b) we get that $p=M_1*P=M_{int}*Projection*P$ and $q=M_2*P=M_{int}*Projection*Rotation_2*P$
+\item Let $P'=Projection*P$ denote the projected point of $P$, then $p=M_{int}*P'$ and $q=M_{int}*R_2*P'$
+\item Since both $M_{int}$ and $M_{int}*R_2$ are 3x3 matrices, then $p=M_{int}*[M_{int}*R_2]'*q$
+\item The homography is $H=M_{int}*[M_{int}*R_2]'$
+\end{enumerate}
+\end{enumerate}
+
+\end{document}

@@ -11,6 +11,7 @@ for i=1:size(mov,4)
     hold on;
     
     %%% put here your optical flow results on im and its successive frame using quiver
+    quiver(OF())
     pause(0.1);
     hold off;
 end
