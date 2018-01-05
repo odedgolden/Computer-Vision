@@ -15,6 +15,28 @@
 \item Since both $M_{int}$ and $M_{int}*R_2$ are 3x3 matrices, then $p=M_{int}*[M_{int}*R_2]'*q$
 \item The homography is $H=M_{int}*[M_{int}*R_2]'$
 \end{enumerate}
+\item Detect the ground plane in a sequence using the optical flow:
+\begin{enumerate}
+\item Assumption: points on the ground plane have relatively the same optical flow orientation.
+\item Method:
+\begin{itemize}
+\item Build an histogram from the orientation (the $O$) matrix.
+\item For every point with the common $O$ value - color it as the ground plane.
+\end{itemize}
+
+\end{enumerate}
+
+\item Determine whether the camera is only rotating using the optical flow:
+\begin{enumerate}
+\item Assumption: If the camera is only rotating, then if the scene is static - all the points in the image have relatively the same optical flow orientation.
+\item Method:
+\begin{itemize}
+\item Build an histogram from the orientation (the $O$) matrix.
+\item If the histogram "looks like" a spike - the camera is only rotating. That is, if the common value of $O$ appears more than the second common by a factor of $k$, where $k$ is our threshold.
+\end{itemize}
+
+\end{enumerate}
+
 \end{enumerate}
 
 \end{document}
