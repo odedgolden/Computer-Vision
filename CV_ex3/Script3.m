@@ -3,7 +3,7 @@ clc
 clear all
 close all
 
-vid = VideoReader('cars5.avi');
+vid = VideoReader('people.avi');
 mov=read(vid);
 
 currAxes = axes;
@@ -22,7 +22,8 @@ for i=2:size(mov,4)
    imshow(im2,[]);
    hold on;
    [U,V,M,O]=OF(im1,im2, Sigma_S, Region);
-   I = seg_OF_orientation(O,0.9);
+%    I = seg_OF_orientation(O,0.9);
+   I = seg_OF_size(M,0.5);
    imshow(I,[]);
 %    [X Y]=meshgrid(1:size(im1,2),1:size(im1,1));
 %    nu12=medfilt2(U,[5 5]);
